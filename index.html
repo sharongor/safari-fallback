@@ -9,21 +9,38 @@
 	</head>
 	<body>
 		<h1>check</h1>
-		<button id="btn">click</button>
+		<button id="btn1">click for whatsapp</button>
+		<button id="btn2">click for an Unistalled app</button>
 		<p id="result"></p>
 
 		<script>
-			document.getElementById('btn').addEventListener('click', () => {
-				const resultElement = document.getElementById('result');
-				const customSchemeURL = 'jfdjicjivjvfvnduvdfnvf://';
-				// const fallbackURL = 'https://www.whatsapp.com';
-				const fallbackURL = 'https://www.google.com';
+            // Add event listeners to the buttons
 
-                
+            document.getElementById('btn1').addEventListener('click', () => {
+                handleButtonClick(
+                    'whatsapp://', 
+                    'https://www.whatsapp.com', // WhatsApp fallback
+                    'WhatsApp is installed.', 
+                    'WhatsApp is not installed.' 
+                );
+            });
 
-                let appOpened = false; // Flag to detect app open
-    
-                // Listen for page visibility change (app switch detection)
+            document.getElementById('btn2').addEventListener('click', () => {
+                handleButtonClick(
+                    'jfdjicjivjvfvnduvdfnvf://', // Custom scheme for an uninstalled app
+                    'https://www.google.com', // Google fallback
+                    'The app is installed.',  // Custom messages for the other app
+                    'The app is not installed.' 
+                );
+            });
+
+
+            const handleButtonClick = (customURL, fallbackURL, successMessage, failureMessage) => {
+                const resultElement = document.getElementById('result');
+                let appOpened = false; 
+
+                // Listen for page visibility change
+
                 const handleVisibilityChange = () => {
                     if (document.visibilityState === 'hidden') {
                         appOpened = true; // Assume the app was opened
@@ -32,27 +49,26 @@
 
                 document.addEventListener('visibilitychange', handleVisibilityChange);
 
-                // Attempt to open the app
+                // Use Iframe for reliablitty improvement
+
                 const iframe = document.createElement('iframe');
                 iframe.style.display = 'none';
-                iframe.src = customSchemeURL;
+                iframe.src = customURL;
                 document.body.appendChild(iframe);
 
-                // Set a timeout to check if the app was opened
                 setTimeout(() => {
                     if (appOpened) {
-                        resultElement.textContent = 'WhatsApp is installed.';
+                        resultElement.textContent = successMessage;
                     } else {
-                        resultElement.textContent = 'WhatsApp is not installed.';
-                        window.location.href = fallbackURL; // Redirect to fallback
+                        resultElement.textContent = failureMessage;
+                        window.location.href = fallbackURL; 
                     }
 
                     // Cleanup
                     document.body.removeChild(iframe);
                     document.removeEventListener('visibilitychange', handleVisibilityChange);
-                
                 }, 1000);
-            });
+            };
 		</script>
 	</body>
 </html>
