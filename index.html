@@ -49,38 +49,43 @@
 
     document.addEventListener('visibilitychange', handleVisibilityChange);
 
-    // Delay iframe injection to ensure smooth processing
+    // Attempt to open the app with window.location.href
+    const startTime = Date.now();
+    try {
+        window.location.href = customURL; // Primary attempt to open the app
+    } catch (error) {
+        console.warn('Primary attempt to open the app failed:', error);
+    }
+
+    // Secondary attempt using iframe as a fallback mechanism
     setTimeout(() => {
-        // Create an iframe to silently attempt the custom URL scheme
-        const iframe = document.createElement('iframe');
-        iframe.style.position = 'absolute';
-        iframe.style.top = '-9999px';
-        iframe.style.left = '-9999px';
-        iframe.src = customURL; // Attempt to open the app
-        document.body.appendChild(iframe);
+        if (!appOpened && !fallbackTriggered) {
+            const iframe = document.createElement('iframe');
+            iframe.style.display = 'none';
+            iframe.src = customURL;
+            document.body.appendChild(iframe);
 
-        // Set a timeout to handle fallback
-        const startTime = Date.now();
-        setTimeout(() => {
-            if (fallbackTriggered) return; // Prevent duplicate fallback logic
+            setTimeout(() => {
+                if (fallbackTriggered) return; // Prevent duplicate fallback logic
 
-            const elapsedTime = Date.now() - startTime;
+                const elapsedTime = Date.now() - startTime;
 
-            if (appOpened || elapsedTime < 1500) {
-                // App was opened successfully
-                resultElement.textContent = successMessage;
-            } else {
-                // App was not opened, redirect to fallback
-                fallbackTriggered = true;
-                resultElement.textContent = failureMessage;
-                window.location.href = fallbackURL; // Redirect to fallback URL
-            }
+                if (appOpened || elapsedTime < 2000) {
+                    // App was opened successfully
+                    resultElement.textContent = successMessage;
+                } else {
+                    // App was not opened, redirect to fallback
+                    fallbackTriggered = true;
+                    resultElement.textContent = failureMessage;
+                    window.location.href = fallbackURL; // Redirect to fallback URL
+                }
 
-            // Clean up the iframe and remove listeners
-            document.body.removeChild(iframe);
-            document.removeEventListener('visibilitychange', handleVisibilityChange);
-        }, 1500); // Adjust timeout as necessary
-    }, 100); // Add a slight delay before injecting the iframe
+                // Clean up the iframe and remove listeners
+                if (iframe) document.body.removeChild(iframe);
+                document.removeEventListener('visibilitychange', handleVisibilityChange);
+            }, 1500); // Adjust timeout as necessary
+        }
+    }, 500); // Delay before secondary iframe attempt
 };
 		</script>
 	</body>
