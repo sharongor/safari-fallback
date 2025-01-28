@@ -38,6 +38,7 @@
             const handleButtonClick = (customURL, fallbackURL, successMessage, failureMessage) => {
                 const resultElement = document.getElementById('result');
                 let appOpened = false; 
+                let fallBackTriggered = false;
 
                 // Listen for page visibility change
 
@@ -61,11 +62,15 @@
                 window.location.href = customURL;
 
                 setTimeout(() => {
+
+                    if(fallBackTriggered) return; // To prevent double fallback when coming back from the app
+
                     const elapsedTime = Date.now() - startTime;
 
                     if (appOpened || elapsedTime < 1500) {
                         resultElement.textContent = successMessage;
                     } else {
+                        fallBackTriggered = true;
                         resultElement.textContent = failureMessage;
                         window.location.href = fallbackURL; 
                     }
