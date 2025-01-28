@@ -19,14 +19,14 @@
 				// const fallbackURL = 'https://www.whatsapp.com';
 				const fallbackURL = 'https://www.google.com';
 
-                // Make the action more "reliable"
-                const anchor = document.createElement('a');
-                anchor.style.display = 'none';
-                document.body.appendChild(anchor);
+                
 
 				const startTime = Date.now();
 				// window.location = whatsappURL;
-                anchor.click();
+                const iframe = document.createElement('iframe');
+                iframe.style.display = 'none';
+                iframe.src = whatsappURL; // Attempt to load the custom scheme
+                document.body.appendChild(iframe);
 
 				setTimeout(() => {
 					const elapsedTime = Date.now() - startTime;
@@ -38,7 +38,7 @@
 						window.location.href = fallbackURL;
 					}
 
-                    document.body.removeChild(anchor);
+                    document.body.removeChild(iframe);
 				}, 1000);
 			});
 		</script>
