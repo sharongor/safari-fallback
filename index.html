@@ -16,20 +16,29 @@
 			document.getElementById('btn').addEventListener('click', () => {
 				const resultElement = document.getElementById('result');
 				const whatsappURL = 'whatsapp://';
-				const fallbackURL = 'https://www.whatsapp.com';
+				// const fallbackURL = 'https://www.whatsapp.com';
+				const fallbackURL = 'https://www.google.com';
+
+                // Make the action more "reliable"
+                const anchor = document.createElement('a');
+                anchor.style.display = 'none';
+                document.body.appendChild(anchor);
 
 				const startTime = Date.now();
-				window.location = whatsappURL;
+				// window.location = whatsappURL;
+                anchor.click();
 
 				setTimeout(() => {
 					const elapsedTime = Date.now() - startTime;
 
 					if (elapsedTime < 1500) {
-						resultElement.textContent = 'installed.';
+						resultElement.textContent = 'Whatsapp is installed.';
 					} else {
-						resultElement.textContent = 'not installed';
+						resultElement.textContent = 'Whatsapp is not installed';
 						window.location.href = fallbackURL;
 					}
+
+                    document.body.removeChild(anchor);
 				}, 1000);
 			});
 		</script>
