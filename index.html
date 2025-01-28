@@ -52,7 +52,12 @@
 
                 // Attempt to open the app
                 const startTime = Date.now();
-                window.location.href = customURL;
+                // window.location.href = customURL;
+
+                const iframe = document.createElement('iframe');
+                iframe.style.display = 'none';
+                iframe.src = customSchemeURL;
+                document.body.appendChild(iframe);
 
                 setTimeout(() => {
 
@@ -68,6 +73,7 @@
                         window.location.href = fallbackURL; 
                     }
 
+                    document.body.removeChild(iframe);
                     document.removeEventListener('visibilitychange', handleVisibilityChange);
                 }, 1500);
             };
