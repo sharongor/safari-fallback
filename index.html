@@ -36,57 +36,56 @@
 
 
             const handleButtonClick = (customURL, fallbackURL, successMessage, failureMessage) => {
-    const resultElement = document.getElementById('result');
-    let appOpened = false; // Flag to detect if the app was opened
-    let fallbackTriggered = false; // To prevent multiple fallback attempts
+                const resultElement = document.getElementById('result');
+                let appOpened = false; 
+                let fallBackTriggered = false;
 
-    // Listen for visibility change
-    const handleVisibilityChange = () => {
-        if (document.visibilityState === 'hidden') {
-            appOpened = true; // Assume the app was opened successfully
-        }
-    };
+                // Listen for page visibility change
 
-    document.addEventListener('visibilitychange', handleVisibilityChange);
+                const handleVisibilityChange = () => {
+                    if (document.visibilityState === 'hidden') {
+                        appOpened = true; // Assume the app was opened
+                    }
+                };
 
-    // Attempt to open the app with window.location.href
-    const startTime = Date.now();
-    try {
-        window.location.href = customURL; // Primary attempt to open the app
-    } catch (error) {
-        console.warn('Primary attempt to open the app failed:', error);
-    }
+                document.addEventListener('visibilitychange', handleVisibilityChange);
 
-    // Secondary attempt using iframe as a fallback mechanism
-    setTimeout(() => {
-        if (!appOpened && !fallbackTriggered) {
-            const iframe = document.createElement('iframe');
-            iframe.style.display = 'none';
-            iframe.src = customURL;
-            document.body.appendChild(iframe);
-
-            setTimeout(() => {
-                if (fallbackTriggered) return; // Prevent duplicate fallback logic
-
-                const elapsedTime = Date.now() - startTime;
-
-                if (appOpened || elapsedTime < 2000) {
-                    // App was opened successfully
-                    resultElement.textContent = successMessage;
-                } else {
-                    // App was not opened, redirect to fallback
-                    fallbackTriggered = true;
-                    resultElement.textContent = failureMessage;
-                    window.location.href = fallbackURL; // Redirect to fallback URL
+                // Attempt to open the app
+                const startTime = Date.now();
+                try {
+                    window.location.assign = customURL;
+                    try {
+                        window.location.href = customURL;
+                    } catch (e) {
+                        console.warn("Failed to launch the custom URL:", e);
+                    }
+                } catch (e) {
+                    console.warn("Failed to launch the custom URL:", e);
                 }
 
-                // Clean up the iframe and remove listeners
-                if (iframe) document.body.removeChild(iframe);
-                document.removeEventListener('visibilitychange', handleVisibilityChange);
-            }, 1500); // Adjust timeout as necessary
-        }
-    }, 500); // Delay before secondary iframe attempt
-};
+                // const iframe = document.createElement('iframe');
+                // iframe.style.display = 'none';
+                // iframe.src = customURL;
+                // document.body.appendChild(iframe);
+
+                setTimeout(() => {
+
+                    if(fallBackTriggered) return; // To prevent double fallback when coming back from the app
+
+                    const elapsedTime = Date.now() - startTime;
+
+                    if (appOpened || elapsedTime < 1500) {
+                        resultElement.textContent = successMessage;
+                    } else {
+                        fallBackTriggered = true;
+                        resultElement.textContent = failureMessage;
+                        window.location.href = fallbackURL; 
+                    }
+
+                    // document.body.removeChild(iframe);
+                    document.removeEventListener('visibilitychange', handleVisibilityChange);
+                }, 1500);
+            };
 		</script>
 	</body>
 </html>
