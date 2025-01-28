@@ -21,26 +21,38 @@
 
                 
 
-				const startTime = Date.now();
-				// window.location = whatsappURL;
+                let appOpened = false; // Flag to detect app open
+    
+                // Listen for page visibility change (app switch detection)
+                const handleVisibilityChange = () => {
+                    if (document.visibilityState === 'hidden') {
+                        appOpened = true; // Assume the app was opened
+                    }
+                };
+
+                document.addEventListener('visibilitychange', handleVisibilityChange);
+
+                // Attempt to open the app
                 const iframe = document.createElement('iframe');
                 iframe.style.display = 'none';
-                iframe.src = whatsappURL; // Attempt to load the custom scheme
+                iframe.src = customSchemeURL;
                 document.body.appendChild(iframe);
 
-				setTimeout(() => {
-					const elapsedTime = Date.now() - startTime;
+                // Set a timeout to check if the app was opened
+                setTimeout(() => {
+                    if (appOpened) {
+                        resultElement.textContent = 'WhatsApp is installed.';
+                    } else {
+                        resultElement.textContent = 'WhatsApp is not installed.';
+                        window.location.href = fallbackURL; // Redirect to fallback
+                    }
 
-					if (elapsedTime < 1500) {
-						resultElement.textContent = 'Whatsapp -- is installed.';
-					} else {
-						resultElement.textContent = 'Whatsapp -- is not installed';
-						window.location.href = fallbackURL;
-					}
-
+                    // Cleanup
                     document.body.removeChild(iframe);
-				}, 1000);
-			});
+                    document.removeEventListener('visibilitychange', handleVisibilityChange);
+                
+                }, 1000);
+            });
 		</script>
 	</body>
 </html>
