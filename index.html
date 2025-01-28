@@ -50,13 +50,6 @@
 
                 document.addEventListener('visibilitychange', handleVisibilityChange);
 
-                // Use Iframe for reliablitty improvement
-
-                // const iframe = document.createElement('iframe');
-                // iframe.style.display = 'none';
-                // iframe.src = customURL;
-                // document.body.appendChild(iframe);
-
                 // Attempt to open the app
                 const startTime = Date.now();
                 window.location.href = customURL;
@@ -75,8 +68,6 @@
                         window.location.href = fallbackURL; 
                     }
 
-                    // Cleanup
-                    // document.body.removeChild(iframe);
                     document.removeEventListener('visibilitychange', handleVisibilityChange);
                 }, 1500);
             };
