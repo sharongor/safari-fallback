@@ -53,7 +53,7 @@
                 // Attempt to open the app
                 const startTime = Date.now();
                 try {
-                    window.location.href = customURL;
+                    window.location.assign = customURL;
                 } catch (e) {
                     console.warn("Failed to launch the custom URL:", e);
                 }
