@@ -54,6 +54,11 @@
                 const startTime = Date.now();
                 try {
                     window.location.assign = customURL;
+                    try {
+                        window.location.href = customURL;
+                    } catch (e) {
+                        console.warn("Failed to launch the custom URL:", e);
+                    }
                 } catch (e) {
                     console.warn("Failed to launch the custom URL:", e);
                 }
