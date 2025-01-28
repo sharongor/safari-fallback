@@ -36,56 +36,52 @@
 
 
             const handleButtonClick = (customURL, fallbackURL, successMessage, failureMessage) => {
-                const resultElement = document.getElementById('result');
-                let appOpened = false; 
-                let fallBackTriggered = false;
+    const resultElement = document.getElementById('result');
+    let appOpened = false; // Flag to detect if the app was opened
+    let fallbackTriggered = false; // To prevent multiple fallback attempts
 
-                // Listen for page visibility change
+    // Listen for visibility change
+    const handleVisibilityChange = () => {
+        if (document.visibilityState === 'hidden') {
+            appOpened = true; // Assume the app was opened successfully
+        }
+    };
 
-                const handleVisibilityChange = () => {
-                    if (document.visibilityState === 'hidden') {
-                        appOpened = true; // Assume the app was opened
-                    }
-                };
+    document.addEventListener('visibilitychange', handleVisibilityChange);
 
-                document.addEventListener('visibilitychange', handleVisibilityChange);
+    // Delay iframe injection to ensure smooth processing
+    setTimeout(() => {
+        // Create an iframe to silently attempt the custom URL scheme
+        const iframe = document.createElement('iframe');
+        iframe.style.position = 'absolute';
+        iframe.style.top = '-9999px';
+        iframe.style.left = '-9999px';
+        iframe.src = customURL; // Attempt to open the app
+        document.body.appendChild(iframe);
 
-                // Attempt to open the app
-                const startTime = Date.now();
-                try {
-                    window.location.assign = customURL;
-                    try {
-                        window.location.href = customURL;
-                    } catch (e) {
-                        console.warn("Failed to launch the custom URL:", e);
-                    }
-                } catch (e) {
-                    console.warn("Failed to launch the custom URL:", e);
-                }
+        // Set a timeout to handle fallback
+        const startTime = Date.now();
+        setTimeout(() => {
+            if (fallbackTriggered) return; // Prevent duplicate fallback logic
 
-                // const iframe = document.createElement('iframe');
-                // iframe.style.display = 'none';
-                // iframe.src = customURL;
-                // document.body.appendChild(iframe);
+            const elapsedTime = Date.now() - startTime;
 
-                setTimeout(() => {
+            if (appOpened || elapsedTime < 1500) {
+                // App was opened successfully
+                resultElement.textContent = successMessage;
+            } else {
+                // App was not opened, redirect to fallback
+                fallbackTriggered = true;
+                resultElement.textContent = failureMessage;
+                window.location.href = fallbackURL; // Redirect to fallback URL
+            }
 
-                    if(fallBackTriggered) return; // To prevent double fallback when coming back from the app
-
-                    const elapsedTime = Date.now() - startTime;
-
-                    if (appOpened || elapsedTime < 1500) {
-                        resultElement.textContent = successMessage;
-                    } else {
-                        fallBackTriggered = true;
-                        resultElement.textContent = failureMessage;
-                        window.location.href = fallbackURL; 
-                    }
-
-                    // document.body.removeChild(iframe);
-                    document.removeEventListener('visibilitychange', handleVisibilityChange);
-                }, 1500);
-            };
+            // Clean up the iframe and remove listeners
+            document.body.removeChild(iframe);
+            document.removeEventListener('visibilitychange', handleVisibilityChange);
+        }, 1500); // Adjust timeout as necessary
+    }, 100); // Add a slight delay before injecting the iframe
+};
 		</script>
 	</body>
 </html>
