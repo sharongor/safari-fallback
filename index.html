@@ -51,13 +51,19 @@
 
                 // Use Iframe for reliablitty improvement
 
-                const iframe = document.createElement('iframe');
-                iframe.style.display = 'none';
-                iframe.src = customURL;
-                document.body.appendChild(iframe);
+                // const iframe = document.createElement('iframe');
+                // iframe.style.display = 'none';
+                // iframe.src = customURL;
+                // document.body.appendChild(iframe);
+
+                // Attempt to open the app
+                const startTime = Date.now();
+                window.location.href = customURL;
 
                 setTimeout(() => {
-                    if (appOpened) {
+                    const elapsedTime = Date.now() - startTime;
+
+                    if (appOpened || elapsedTime < 1500) {
                         resultElement.textContent = successMessage;
                     } else {
                         resultElement.textContent = failureMessage;
@@ -65,9 +71,9 @@
                     }
 
                     // Cleanup
-                    document.body.removeChild(iframe);
+                    // document.body.removeChild(iframe);
                     document.removeEventListener('visibilitychange', handleVisibilityChange);
-                }, 1000);
+                }, 1500);
             };
 		</script>
 	</body>
