@@ -30,20 +30,20 @@
 
             try {
                 // Fetch the deep link securely from backend 
-                const response = await fetch('/get-deeplink.js');
-                const data = await response.json();
+                // const response = await fetch('get-deeplink.js');
+                // const data = await response.json();
 
-                if (!data.deepLink) {
-                    throw new Error('Deep link not found');
-                }
+                // if (!data.deepLink) {
+                //     throw new Error('Deep link not found');
+                // }
 
-                const appDeepLink = data.deepLink;  // Secure deep link URL
+                // const appDeepLink = data.deepLink;  // Secure deep link URL
 
                 // Attempt to open the app
                 const startTime = Date.now();
                 try{
                     // window.location.href = "pinfoapp://";
-                    window.location.href = deepLink; // fnx web
+                    window.location.href = "https://www.fnx.co.il"; // fnx web
                 
                 }catch (e){
                     console.warn("Failed to launch ", e);
