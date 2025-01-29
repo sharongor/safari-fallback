@@ -3,7 +3,7 @@
       "apps": [],
       "details": [
         {
-          "appID": "com.phoenix.mobile.pinfo",
+          "appID": "",
           "paths": [ "/pinfoapp/*" ]
         }
       ]

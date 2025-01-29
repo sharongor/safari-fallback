@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -13,10 +12,8 @@
     <p id="result"></p>
 
     <script>
-        document.getElementById('openApp').addEventListener('click', () => {
-            // const appDeepLink = 'pinfoapp://';
-            const appDeepLink = 'whatsapp://';
-            const fallbackURL = 'https://www.google.com';
+        document.getElementById('openApp').addEventListener('click', async () => {
+            const fallbackURL = 'https://www.google.com';  
 
             let appOpened = false;
 
@@ -29,19 +26,35 @@
 
             document.addEventListener('visibilitychange', handleVisibilityChange);
 
-            // Attempt to open the app
-            const startTime = Date.now();
-            window.location.href = appDeepLink;
+            try {
+                // Fetch the deep link securely from backend 
+                const response = await fetch('/pages/api/get-deeplink');
+                const data = await response.json();
 
-            // If app is not opened, redirect to fallback after a delay
-            setTimeout(() => {
-                const elapsedTime = Date.now() - startTime;
-                if (!appOpened && elapsedTime > 1500) {
-                    window.location.href = fallbackURL;
+                if (!data.deepLink) {
+                    throw new Error('Deep link not found');
                 }
 
-                document.removeEventListener('visibilitychange', handleVisibilityChange);
-            }, 1500);
+                const appDeepLink = data.deepLink;  // Secure deep link URL
+
+                // Attempt to open the app
+                const startTime = Date.now();
+                window.location.href = appDeepLink;
+
+                // Check if app was opened, otherwise redirect to fallback
+                setTimeout(() => {
+                    const elapsedTime = Date.now() - startTime;
+                    if (!appOpened && elapsedTime > 1500) {
+                        window.location.href = fallbackURL;
+                    }
+
+                    document.removeEventListener('visibilitychange', handleVisibilityChange);
+                }, 1500);
+
+            } catch (error) {
+                console.error('Failed to fetch deep link:', error);
+                window.location.href = fallbackURL;  // Fallback if fetch fails
+            }
         });
     </script>
 
