@@ -50,7 +50,7 @@
                 *    OPTIONAL - try fetching the deeplink to see if available
                 */ 
 
-                fetch(appDeepLink, { method: 'HEAD' })
+                fetch(appDeepLink, { method: 'HEAD' , mode: 'no-cors' })
                         .then(response => {
                             if (response.ok) {
                                 // Main URL is accessible, navigate to it
