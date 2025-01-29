@@ -10,13 +10,13 @@
 
 </head> 
 <body>
-
-    <p>Redirecting...</p>
+    <h2>Tap the button to continue</h2>
+    <button id="openApp">Open App</button>
 
 
 
     <script>
-        // document.getElementById('openApp').addEventListener('click', async () => {
+        document.getElementById('openApp').addEventListener('click', async () => {
             const fallbackURL = 'https://www.google.com';  
 
             let appOpened = false;
@@ -50,7 +50,7 @@
                 // Check if app was opened, otherwise redirect to fallback
                 setTimeout(() => {
                     const elapsedTime = Date.now() - startTime;
-                    if (!appOpened && elapsedTime > 1500) {
+                    if (!appOpened) {
                         window.location.href = fallbackURL;
                     }
 
@@ -61,7 +61,7 @@
                 console.error('Failed to fetch deep link:', error);
                 window.location.href = fallbackURL;  // Fallback if fetch fails
             }
-        // });
+        });
     </script>
 
 </body>
