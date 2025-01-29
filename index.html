@@ -29,45 +29,18 @@
             document.addEventListener('visibilitychange', handleVisibilityChange);
 
             try {
-                // // Fetch the deep link securely from backend 
-                // const response = await fetch('/get-deeplink.js');
-                // const data = await response.json();
-
-                // if (!data.deepLink) {
-                //     throw new Error('Deep link not found');
-                // }
-
-                // const appDeepLink = data.deepLink;  // Secure deep link URL
-                
-                
+        
                 const appDeepLink = "https://pinfo-mobileapp-services.fnx.co.il/onelink/navigate/TreatmentSubjectsScreen";  // Secure deep link URL
 
 
-
-
-
-                /*
-                *    OPTIONAL - try fetching the deeplink to see if available
-                */ 
-
-                // fetch(appDeepLink, { method: 'HEAD' , mode: 'no-cors' })
-                //         .then(response => {
-                //             if (response.ok) {
-                //                 // Main URL is accessible, navigate to it
-                //                 window.location.href = appDeepLink;
-                //             } else {
-                //                 // Main URL is not accessible, navigate to fallback
-                //                 window.location.href = fallbackURL;
-                //             }
-                //         })
-                //         .catch(() => {
-                //             // An error occurred (e.g., network error), navigate to fallback
-                //             window.location.href = fallbackURL;
-                //         });
+                const iframe = document.createElement('iframe');
+                iframe.style.display = 'none';
+                iframe.src = appDeepLink;
+                document.body.appendChild(iframe);
 
                 // Attempt to open the app
                 const startTime = Date.now();
-                window.location.href = appDeepLink;
+                // window.location.href = appDeepLink;
 
                 // Check if app was opened, otherwise redirect to fallback
                 setTimeout(() => {
@@ -77,6 +50,7 @@
                     }
 
                     document.removeEventListener('visibilitychange', handleVisibilityChange);
+                    document.body.removeChild(iframe); // Clean up
                 }, 1500);
 
             } catch (error) {
