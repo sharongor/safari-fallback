@@ -29,18 +29,30 @@
             document.addEventListener('visibilitychange', handleVisibilityChange);
 
             try {
-        
-                const appDeepLink = "https://pinfo-mobileapp-services.fnx.co.il/onelink/navigate/TreatmentSubjectsScreen";  // Secure deep link URL
+    
+    
+                const appDeepLink = "https://pinfo-mobileapp-services.fnx.co.il/onelink/navigate/TreatmentSubjectsScreen";  
 
 
-                const iframe = document.createElement('iframe');
-                iframe.style.display = 'none';
-                iframe.src = appDeepLink;
-                document.body.appendChild(iframe);
+
+                // Detect platform and set deep link
+                if (/iPhone|iPad|iPod/|/Mack/.test(navigator.userAgent)) {
+                    appDeepLink = "whatsapp://"; // Replace with actual iOS deep link
+                } else {
+                    window.location.href = fallbackURL; // Redirect to Google if not on a mobile device
+                    return;
+                }
+
+                setTimeout(() => {
+                    window.location.href = appDeepLink;
+                }, 200);
+
 
                 // Attempt to open the app
                 const startTime = Date.now();
                 // window.location.href = appDeepLink;
+
+                
 
                 // Check if app was opened, otherwise redirect to fallback
                 setTimeout(() => {
@@ -50,7 +62,6 @@
                     }
 
                     document.removeEventListener('visibilitychange', handleVisibilityChange);
-                    document.body.removeChild(iframe); // Clean up
                 }, 1500);
 
             } catch (error) {
