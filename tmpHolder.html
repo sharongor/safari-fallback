@@ -2,65 +2,96 @@
 
 
 
+
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Deep Link Example</title>
-</head>
-<body>
+	<head>
+		<meta charset="UTF-8" />
+		<meta
+			name="viewport"
+			content="width=device-width, initial-scale=1.0" />
+		<title>document</title>
+	</head>
+	<body>
+		<h1>check</h1>
+		<button id="btn1">click for whatsapp</button>
+		<button id="btn2">click for an Unistalled app</button>
+		<p id="result"></p>
 
-    <h1>Click the button to open the app</h1>
-    <button id="openApp">Open My App</button>
-    <p id="result"></p>
+		<script>
+            // Add event listeners to the buttons
 
-    <script>
-        document.getElementById('openApp').addEventListener('click', async () => {
-            const fallbackURL = 'https://www.google.com';  
+            document.getElementById('btn1').addEventListener('click', () => {
+                handleButtonClick(
+                    'whatsapp://', 
+                    'https://www.whatsapp.com', // WhatsApp fallback
+                    'WhatsApp is installed.', 
+                    'WhatsApp is not installed.' 
+                );
+            });
 
-            let appOpened = false;
+            document.getElementById('btn2').addEventListener('click', () => {
+                handleButtonClick(
+                    'jfdjicjivjvfvnduvdfnvf://', // Custom scheme for an uninstalled app
+                    'https://www.google.com', // Google fallback
+                    'The app is installed.',  // Custom messages for the other app
+                    'The app is not installed.' 
+                );
+            });
 
-            // Listen for visibility change
-            const handleVisibilityChange = () => {
-                if (document.visibilityState === 'hidden') {
-                    appOpened = true;
-                }
-            };
 
-            document.addEventListener('visibilitychange', handleVisibilityChange);
+            const handleButtonClick = (customURL, fallbackURL, successMessage, failureMessage) => {
+                const resultElement = document.getElementById('result');
+                let appOpened = false; 
+                let fallBackTriggered = false;
 
-            try {
-                // Fetch the deep link securely from backend 
-                const response = await fetch('/get-deeplink');
-                const data = await response.json();
+                // Listen for page visibility change
 
-                if (!data.deepLink) {
-                    throw new Error('Deep link not found');
-                }
+                const handleVisibilityChange = () => {
+                    if (document.visibilityState === 'hidden') {
+                        appOpened = true; // Assume the app was opened
+                    }
+                };
 
-                const appDeepLink = data.deepLink;  // Secure deep link URL
+                document.addEventListener('visibilitychange', handleVisibilityChange);
 
                 // Attempt to open the app
                 const startTime = Date.now();
-                window.location.href = appDeepLink;
+                try {
+                    window.location.assign = customURL;
+                    try {
+                        window.location.href = customURL;
+                    } catch (e) {
+                        console.warn("Failed to launch the custom URL:", e);
+                    }
+                } catch (e) {
+                    console.warn("Failed to launch the custom URL:", e);
+                }
 
-                // Check if app was opened, otherwise redirect to fallback
+                // const iframe = document.createElement('iframe');
+                // iframe.style.display = 'none';
+                // iframe.src = customURL;
+                // document.body.appendChild(iframe);
+
                 setTimeout(() => {
+
+                    if(fallBackTriggered) return; // To prevent double fallback when coming back from the app
+
                     const elapsedTime = Date.now() - startTime;
-                    if (!appOpened && elapsedTime > 1500) {
-                        window.location.href = fallbackURL;
+
+                    if (appOpened || elapsedTime < 1500) {
+                        resultElement.textContent = successMessage;
+                    } else {
+                        fallBackTriggered = true;
+                        resultElement.textContent = failureMessage;
+                        window.location.href = fallbackURL; 
                     }
 
+                    // document.body.removeChild(iframe);
                     document.removeEventListener('visibilitychange', handleVisibilityChange);
                 }, 1500);
-
-            } catch (error) {
-                console.error('Failed to fetch deep link:', error);
-                window.location.href = fallbackURL;  // Fallback if fetch fails
-            }
-        });
-    </script>
-
-</body>
+            };
+		</script>
+	</body>
 </html>
+
