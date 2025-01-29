@@ -36,14 +36,26 @@
                 const appDeepLink = "https://pinfo-mobileapp-services.fnx.co.il/onelink/navigate/TreatmentSubjectsScreen";  
 
 
-                setTimeout(() => {
-                    window.location.href = appDeepLink;
-                }, 300);
+                // setTimeout(() => {
+                //     window.location.href = appDeepLink;
+                // }, 300);
 
 
                 // Attempt to open the app
                 const startTime = Date.now();
                 // window.location.href = appDeepLink;
+
+
+
+
+
+                // Open deep link in a new window (avoids Safari handling it automatically)
+                const newTab = window.open(appDeepLink, "_blank");
+
+                // Close the new tab after 1s to prevent Safari from blocking it
+                setTimeout(() => {
+                    if (newTab) newTab.close();
+                }, 1000);
 
                 
 
