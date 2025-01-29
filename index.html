@@ -34,15 +34,6 @@
                 const appDeepLink = "https://pinfo-mobileapp-services.fnx.co.il/onelink/navigate/TreatmentSubjectsScreen";  
 
 
-
-                // Detect platform and set deep link
-                if (/iPhone|iPad|iPod/|/Mack/.test(navigator.userAgent)) {
-                    appDeepLink = "whatsapp://"; // Replace with actual iOS deep link
-                } else {
-                    window.location.href = fallbackURL; // Redirect to Google if not on a mobile device
-                    return;
-                }
-
                 setTimeout(() => {
                     window.location.href = appDeepLink;
                 }, 200);
