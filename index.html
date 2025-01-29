@@ -30,57 +30,51 @@
 
             try {
                 // Fetch the deep link securely from backend 
-                // const response = await fetch('get-deeplink.js');
-                // const data = await response.json();
+                const response = await fetch('/get-deeplink');
+                const data = await response.json();
 
-                // if (!data.deepLink) {
-                //     throw new Error('Deep link not found');
-                // }
+                if (!data.deepLink) {
+                    throw new Error('Deep link not found');
+                }
 
-                // const appDeepLink = data.deepLink;  // Secure deep link URL
-
-                // Attempt to open the app
-                const startTime = Date.now();
-                // try{
-                //     // window.location.href = "pinfoapp://";
-                //     // window.location.href = "https://www.fnx.co.il"; // fnx web
-                //     window.location.href = "jonnnnnnnnn://"; 
-                
-                // }catch (e){
-                //     console.warn("Failed to launch ", e);
-                // }
+                const appDeepLink = data.deepLink;  // Secure deep link URL
 
 
 
 
-                fetch("whatsapp://", { method: 'HEAD' })
-                .then(response => {
-                    if (response.ok) {
-                        // Main URL is accessible, navigate to it
-                        window.location.href = "whatsapp://";
-                    } else {
-                        // Main URL is not accessible, navigate to fallback
-                        window.location.href = fallbackUrl;
-                    }
-                })
-                .catch(() => {
-                    // An error occurred (e.g., network error), navigate to fallback
-                    window.location.href = fallbackUrl;
-                });
-                
 
-                // Check if app was opened, otherwise redirect to fallback
-                setTimeout(() => {
-                    const elapsedTime = Date.now() - startTime;
-                    if (!appOpened || elapsedTime > 1500) {
-                        window.location.href = fallbackURL;
-                        console.log("Failed!");
-                    }else{
-                        console.log("Success!");
-                    }
+                /*
+                *    OPTIONAL - try fetching the deeplink to see if available
+                */ 
 
-                    document.removeEventListener('visibilitychange', handleVisibilityChange);
-                }, 1500);
+                fetch(appDeepLink, { method: 'HEAD' })
+                        .then(response => {
+                            if (response.ok) {
+                                // Main URL is accessible, navigate to it
+                                window.location.href = appDeepLink;
+                            } else {
+                                // Main URL is not accessible, navigate to fallback
+                                window.location.href = fallbackUrl;
+                            }
+                        })
+                        .catch(() => {
+                            // An error occurred (e.g., network error), navigate to fallback
+                            window.location.href = fallbackUrl;
+                        });
+
+                // // Attempt to open the app
+                // const startTime = Date.now();
+                // window.location.href = appDeepLink;
+
+                // // Check if app was opened, otherwise redirect to fallback
+                // setTimeout(() => {
+                //     const elapsedTime = Date.now() - startTime;
+                //     if (!appOpened && elapsedTime > 1500) {
+                //         window.location.href = fallbackURL;
+                //     }
+
+                //     document.removeEventListener('visibilitychange', handleVisibilityChange);
+                // }, 1500);
 
             } catch (error) {
                 console.error('Failed to fetch deep link:', error);
