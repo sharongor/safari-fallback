@@ -30,7 +30,7 @@
 
             try {
                 // Fetch the deep link securely from backend 
-                const response = await fetch('/get-deeplink');
+                const response = await fetch('/get-deeplink.js');
                 const data = await response.json();
 
                 if (!data.deepLink) {
