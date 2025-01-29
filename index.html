@@ -87,31 +87,6 @@
                 window.location.href = fallbackURL;  // Fallback if fetch fails
             }
         });
-
-
-
-
-        function checkUrlAccessibility(url, fallbackUrl) {
-            fetch(url, { method: 'HEAD' })
-                .then(response => {
-                    if (response.ok) {
-                        // Main URL is accessible, navigate to it
-                        window.location.href = url;
-                    } else {
-                        // Main URL is not accessible, navigate to fallback
-                        window.location.href = fallbackUrl;
-                    }
-                })
-                .catch(() => {
-                    // An error occurred (e.g., network error), navigate to fallback
-                    window.location.href = fallbackUrl;
-                });
-        }
-
-        // Example usage
-        const mainUrl = 'https://example.com/main';
-        const fallbackUrl = 'https://example.com/fallback';
-        checkUrlAccessibility(mainUrl, fallbackUrl);
     </script>
 
 </body>
