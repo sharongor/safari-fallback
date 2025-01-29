@@ -30,7 +30,7 @@
 
             try {
                 // Fetch the deep link securely from backend 
-                const response = await fetch('/get-deeplink');
+                const response = await fetch('/get-deeplink.js');
                 const data = await response.json();
 
                 if (!data.deepLink) {
@@ -41,13 +41,23 @@
 
                 // Attempt to open the app
                 const startTime = Date.now();
-                window.location.href = "pinfoapp://";
+                try{
+                    // window.location.href = "pinfoapp://";
+                    window.location.href = deepLink; // fnx web
+                
+                }catch (e){
+                    console.warn("Failed to launch ", e);
+                }
+                
 
                 // Check if app was opened, otherwise redirect to fallback
                 setTimeout(() => {
                     const elapsedTime = Date.now() - startTime;
-                    if (elapsedTime > 1500) {
+                    if (!appOpened || elapsedTime > 1500) {
                         window.location.href = fallbackURL;
+                        console.log("Failed!");
+                    }else{
+                        console.log("Success!");
                     }
 
                     document.removeEventListener('visibilitychange', handleVisibilityChange);
