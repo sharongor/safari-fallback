@@ -29,15 +29,18 @@
             document.addEventListener('visibilitychange', handleVisibilityChange);
 
             try {
-                // Fetch the deep link securely from backend 
-                const response = await fetch('/get-deeplink.js');
-                const data = await response.json();
+                // // Fetch the deep link securely from backend 
+                // const response = await fetch('/get-deeplink.js');
+                // const data = await response.json();
 
-                if (!data.deepLink) {
-                    throw new Error('Deep link not found');
-                }
+                // if (!data.deepLink) {
+                //     throw new Error('Deep link not found');
+                // }
 
-                const appDeepLink = data.deepLink;  // Secure deep link URL
+                // const appDeepLink = data.deepLink;  // Secure deep link URL
+                
+                
+                const appDeepLink = "https://pinfo-mobileapp-services.fnx.co.il/onelink/navigate/TreatmentSubjectsScreen";  // Secure deep link URL
 
 
 
