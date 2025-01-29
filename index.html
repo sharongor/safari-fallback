@@ -57,12 +57,12 @@
                                 window.location.href = appDeepLink;
                             } else {
                                 // Main URL is not accessible, navigate to fallback
-                                window.location.href = fallbackUrl;
+                                window.location.href = fallbackURL;
                             }
                         })
                         .catch(() => {
                             // An error occurred (e.g., network error), navigate to fallback
-                            window.location.href = fallbackUrl;
+                            window.location.href = fallbackURL;
                         });
 
                 // // Attempt to open the app
