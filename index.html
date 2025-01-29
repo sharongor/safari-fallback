@@ -1,11 +1,10 @@
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Deep Link Example</title>
+
 </head>
 <body>
 
@@ -13,54 +12,11 @@
     <button id="openApp">Open My App</button>
     <p id="result"></p>
 
+
     <script>
-        document.getElementById('openApp').addEventListener('click', async () => {
-            const fallbackURL = 'https://www.google.com';  
-
-            let appOpened = false;
-
-            // Listen for visibility change
-            const handleVisibilityChange = () => {
-                if (document.visibilityState === 'hidden') {
-                    appOpened = true;
-                }
-            };
-
-            document.addEventListener('visibilitychange', handleVisibilityChange);
-
-            try {
-    
-    
-                const appDeepLink = "https://pinfo-mobileapp-services.fnx.co.il/onelink/navigate/TreatmentSubjectsScreen";  
-
-
-                setTimeout(() => {
-                    window.location.href = appDeepLink;
-                }, 500);
-
-
-                // Attempt to open the app
-                const startTime = Date.now();
-                // window.location.href = appDeepLink;
-
-                
-
-                // Check if app was opened, otherwise redirect to fallback
-                setTimeout(() => {
-                    const elapsedTime = Date.now() - startTime;
-                    if (!appOpened && elapsedTime > 1500) {
-                        window.location.href = fallbackURL;
-                    }
-
-                    document.removeEventListener('visibilitychange', handleVisibilityChange);
-                }, 1500);
-
-            } catch (error) {
-                console.error('Failed to fetch deep link:', error);
-                window.location.href = fallbackURL;  // Fallback if fetch fails
-            }
+        document.getElementById('openApp').addEventListener('click', () => {
+            window.location.href = "interstitial.html"; // Redirect to an intermediate page
         });
     </script>
-
 </body>
 </html>
