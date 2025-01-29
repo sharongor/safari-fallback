@@ -34,7 +34,11 @@
     
     
                 // const appDeepLink = "https://pinfo-mobileapp-services.fnx.co.il/onelink/navigate/TreatmentSubjectsScreen";  
-                const appDeepLink = "googlechrome://https://pinfo-mobileapp-services.fnx.co.il/onelink/navigate/TreatmentSubjectsScreen";  
+                // const appDeepLink = "googlechrome://https://pinfo-mobileapp-services.fnx.co.il/onelink/navigate/TreatmentSubjectsScreen";  
+
+                const originalDeepLink = "https://pinfo-mobileapp-services.fnx.co.il/onelink/navigate/TreatmentSubjectsScreen"; // Your HTTPS deep link
+                const chromeDeepLink = "googlechrome://" + originalDeepLink.replace(/^https?:\/\//, ""); // Force Chrome to open it
+    
 
                 const startTime = Date.now();
 
@@ -47,7 +51,7 @@
                 //     if (newTab) newTab.close();
                 // }, 1000);
 
-                window.location.href = appDeepLink;
+                window.location.href = chromeDeepLink;
 
                 // Check if app was opened, otherwise redirect to fallback
                 setTimeout(() => {
