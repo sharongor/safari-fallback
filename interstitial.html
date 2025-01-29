@@ -39,20 +39,20 @@
                 const startTime = Date.now();
 
 
-                // Open deep link in a new window (avoids Safari handling it automatically)
-                const newTab = window.open(appDeepLink, "_blank");
+                // // Open deep link in a new window (avoids Safari handling it automatically)
+                // const newTab = window.open(appDeepLink, "_blank");
 
-                // Close the new tab after 1s to prevent Safari from blocking it
-                setTimeout(() => {
-                    if (newTab) newTab.close();
-                }, 1000);
+                // // Close the new tab after 1s to prevent Safari from blocking it
+                // setTimeout(() => {
+                //     if (newTab) newTab.close();
+                // }, 1000);
 
-                
+                window.location.href = appDeepLink;
 
                 // Check if app was opened, otherwise redirect to fallback
                 setTimeout(() => {
                     const elapsedTime = Date.now() - startTime;
-                    if (!appOpened) {
+                    if (!appOpened || elapsedTime > 1500) {
                         window.location.href = fallbackURL;
                     }
 
