@@ -1,0 +1,13 @@
+{
+    "applinks": {
+        "apps": [],
+        "details": [
+            {
+                "appID": "KC3GWH72ZC.com.phoenix.mobile.pinfo",
+                "paths": [
+                    "/https://pinfo-mobileapp-services.fnx.co.il/onelink/navigate/TreatmentSubjectsScreen/*"
+                ]
+            }
+        ]
+    }
+}
